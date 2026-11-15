@@ -1,0 +1,23 @@
+3 files, 11 findings
+HIGH     FW001 legacy/legacy.rules:3
+         INPUT policy is ACCEPT and no final DROP or REJECT rule closes it
+HIGH     FW002 legacy/legacy.rules:4
+         FORWARD policy is ACCEPT and no final DROP or REJECT rule closes it
+HIGH     FW003 legacy/legacy.rules:7
+         port 3306 is open to any source address (rule opens 3306)
+HIGH     FW003 legacy/legacy.rules:8
+         port 6379 is open to any source address (rule opens 80,6379)
+HIGH     FW003 legacy/legacy.rules:9
+         port 9200 is open to any source address (rule opens 8000:12000)
+HIGH     FW004 legacy/legacy.rules:10
+         unconditional ACCEPT in INPUT: every packet is allowed
+MEDIUM   FW003 legacy/legacy.rules:6
+         port 22 is open to any source address (rule opens 22): restrict it with -s
+MEDIUM   FW006 legacy/legacy.rules:9
+         a range of 4001 ports is open to any source address
+LOW      FW005 legacy/closed.v4:2
+         INPUT is closed but no rule accepts ESTABLISHED,RELATED traffic: replies to your own connections are dropped
+INFO     FW000 legacy/closed.v4:6
+         line not understood, ignored: this is not a rule
+INFO     FW000 legacy/closed.v4:7
+         rule line not understood, ignored: -A
