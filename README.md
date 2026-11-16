@@ -2,6 +2,8 @@
 
 iptables-audit reads the output of `iptables-save` (or a saved `rules.v4`), tracks the tables, chains and default policies, and checks the rules that decide what can reach the host: a chain that defaults to ACCEPT with nothing at the end to close it, an unconditional ACCEPT, sensitive services (databases, Docker API, Telnet, SMB, VNC) open to every source address, wide port ranges and a missing rule for established connections.
 
+![Terminal demo of iptables-audit on its sample data](docs/demo.svg)
+
 **Live demo:** https://jvch0512.github.io/iptables-audit/ (Synthetic rule sets.)
 
 Free Pascal 3, standard units only. The demo page is rendered from the tool's `--tsv` output by `scripts/site.py` (Python 3, only needed to regenerate the page).
@@ -48,3 +50,13 @@ make test    # 53 checks, incl. 3000-case fuzzing and CLI exit codes
 ```
 
 MIT.
+
+## Code scanning (SARIF)
+
+`scripts/tsv2sarif.py` converts the `--tsv` output into SARIF 2.1.0, so findings show up in GitHub code scanning:
+
+```sh
+build/iptables-audit examples --tsv | python3 scripts/tsv2sarif.py --tool iptables-audit --prefix examples > results.sarif
+```
+
+Upload `results.sarif` with `github/codeql-action/upload-sarif`. Severities map to SARIF levels (critical and high to error, medium to warning, low and info to note) and to a `security-severity` score.
